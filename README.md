@@ -1,6 +1,7 @@
 # Script di installazione di arch linux con filesystem Btrfs
 
 ATTENZIONE: script ancora in fase di sviluppo/test --> SE NE SCONSIGLIA L'UTILIZZO 
+
 ATTENZIONE: l'esecuzione dello script installa.sh cancellerà l'intero disco senza chiedere conferma.
 
 ## Requisiti
