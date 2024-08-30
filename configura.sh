@@ -98,16 +98,6 @@ echo "%wheel ALL=(ALL) ALL" >> /etc/sudoers
 # Crea le cartelle utente
 sudo -u ${NEW_USER} LC_ALL=it_IT.UTF-8 xdg-user-dirs-update --force 
 
-# Imposta l'autologin  <---------------------------------------------
-if [[ ${AUTOLOGIN} == "s" ]]; then 
-    mkdir -p /etc/systemd/system/getty@tty1.service.d
-    tee /etc/systemd/system/getty@tty1.service.d/autologin.conf << EOF 
-[Service]
-ExecStart=
-ExecStart= -/sbin/agetty -o '-p -f -- \\u' --noclear --autologin ${NEW_USER} %I $TERM
-EOF
-fi
-
 ################################################
 ##### Firewall e rete                      
 ################################################
