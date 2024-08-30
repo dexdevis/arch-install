@@ -63,31 +63,7 @@ pacman -Syu
 ##### Installa applicazioni di base
 ################################################
 
-pacman -S --noconfirm \
-    sudo \
-    bash-completion \
-    dialog \    
-    wpa_supplicant \    
-    mtools \
-    dosfstools \    
-    coreutils \
-    util-linux \
-    inetutils \
-    xdg-utils \
-    xdg-user-dirs \
-    alsa-utils \    
-    htop \
-    git \
-    p7zip \
-    unzip \
-    unrar \
-    which \
-    man-db \
-    man-pages \
-    rsync \
-    ufw \
-    zram-generator
-
+pacman -S --noconfirm sudo bash-completion dialog wpa_supplicant mtools dosfstools coreutils util-linux inetutils xdg-utils xdg-user-dirs alsa-utils htop git p7zip unzip unrar which man-db man-pages rsync ufw zram-generator
 
 ################################################
 ##### zram (swap)
@@ -112,21 +88,20 @@ echo 'vm.vfs_cache_pressure=50' > /etc/sysctl.d/99-vfs-cache-pressure.conf
 ################################################
 
 # Setta la password di root
-#echo "root:${NEW_USER_PASSWORD}" | passwd
 echo -en "${NEW_USER_PASSWORD}\n${NEW_USER_PASSWORD}" | passwd
 
 # Setup nuovo utente
 useradd -m -G wheel ${NEW_USER}
-#echo "${NEW_USER}:${NEW_USER_PASSWORD}" | passwd
 echo -en "${NEW_USER_PASSWORD}\n${NEW_USER_PASSWORD}" | passwd ${NEW_USER}
 echo "%wheel ALL=(ALL) ALL" >> /etc/sudoers
 
-# Crea le cartelle utente
-sudo -u ${NEW_USER} LC_ALL=it_IT.UTF-8 xdg-user-dirs-update --force
+# Crea le cartelle utente  <--------------------------------------
+sudo -u ${NEW_USER} LC_ALL=it_IT.UTF-8 xdg-user-dirs-update --force 
 
-# Imposta l'autologin
-if ${AUTOLOGIN}=="s"; then
-    tee /etc/systemd/system/getty@tty1.service.d/autologin.conf << EOF
+# Imposta l'autologin  <---------------------------------------------
+if ${AUTOLOGIN}=="s"; then 
+    mkdir -p /etc/systemd/system/getty@tty1.service.d
+    tee /etc/systemd/system/getty@tty1.service.d/autologin.conf << EOF 
 [Service]
 ExecStart=
 ExecStart= -/sbin/agetty -o '-p -f -- \\u' --noclear --autologin ${NEW_USER} %I $TERM
@@ -134,7 +109,7 @@ EOF
 fi
 
 ################################################
-##### Firewall e rete
+##### Firewall e rete                      
 ################################################
 
 systemctl enable ufw.service
