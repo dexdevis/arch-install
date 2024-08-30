@@ -64,6 +64,7 @@ pacman -Syu
 ################################################
 
 pacman -S --noconfirm \
+    efibootmgr \
     grub \
     sudo \
     bash-completion \
@@ -138,19 +139,38 @@ ufw enable
 clear
 ip link
 read -p "Inserire il nome della scheda di rete Ethernet: " ETH
-read -p "Inserire il nome della scheda di rete Wifi: " WIFI # <--------------------------------------------------------
-
+read -p "Inserire il nome della scheda di rete Wifi ([ N ] se non presente): " WIFI
 clear
-read -p "Inserire il nome della rete Wifi: " ESSID # <--------------------------------------------------------
-read -sp "Inserire la password: " PASS # <--------------------------------------------------------
 
-# Creo il file di configurazione dell'interfaccia Wifi <-----------------------------------------------------------
+if WIFI="N"; then
+read -p "Inserire il nome della rete Wifi: " ESSID
+read -sp "Inserire la password: " PASS 
+
+# Creo il file di configurazione dell'interfaccia Wifi
 tee /etc/wpa_supplicant/wpa_supplicant-${WIFI}.conf << EOF
 ctrl_interface=/var/run/wpa_supplicant
 eapol_version=1
 ap_scan=1
 fast_reauth=1
 EOF
+
+# Creo la configurazione per la connessione Wireless
+tee /etc/systemd/network/25-wireless.network << EOF
+[Match]
+Name=${WIFI}
+
+[Network]
+DHCP=yes
+IgnoreCarrierLoss=3s
+DNS=1.1.1.1 1.0.0.1
+
+[DHCPv4]
+RouteMetric=600
+
+[IPv6AcceptRA]
+RouteMetric=600
+EOF
+fi
 
 # Creo la configurazione per la connessione Ethernet
 tee /etc/systemd/network/20-wired.network << EOF
@@ -168,31 +188,16 @@ RouteMetric=100
 RouteMetric=100
 EOF
 
-# Creo la configurazione per la connessione Wireless <------------------------------------------------
-tee /etc/systemd/network/25-wireless.network << EOF
-[Match]
-Name=${WIFI}
-
-[Network]
-DHCP=yes
-IgnoreCarrierLoss=3s
-DNS=1.1.1.1 1.0.0.1
-
-[DHCPv4]
-RouteMetric=600
-
-[IPv6AcceptRA]
-RouteMetric=600
-EOF
-
 systemctl enable systemd-networkd.service
 systemctl enable systemd-resolved.service
-wpa_passphrase ${ESSID} '${PASS}' >> /etc/wpa_supplicant/wpa_supplicant-${WIFI}.conf
 
-# Cancella la password in chiaro
-sed -i "s|^${PASS}|********|g" /etc/wpa_supplicant/wpa_supplicant-${WIFI}.conf
-systemctl enable wpa_supplicant@${WIFI}.service
+if WIFI="N"; then
+    wpa_passphrase ${ESSID} '${PASS}' >> /etc/wpa_supplicant/wpa_supplicant-${WIFI}.conf
 
+    # Cancella la password in chiaro
+    sed -i "s|^${PASS}|********|g" /etc/wpa_supplicant/wpa_supplicant-${WIFI}.conf
+    systemctl enable wpa_supplicant@${WIFI}.service
+fi
 
 ################################################
 ##### Initramfs
@@ -206,7 +211,7 @@ mkinitcpio -P
 ##### GRUB
 ################################################
 
-grub-install --target=x86_64-efi --bootloader-id=GRUB --recheck /dev/nvme0n1 # <------------------------------------------------------
+grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB # <------------------------------------------------------
 grub-mkconfig -o /boot/grub/grub.cfg
 
 
@@ -217,14 +222,14 @@ grub-mkconfig -o /boot/grub/grub.cfg
 # Installa i drivers della GPU
 pacman -S --noconfirm mesa vulkan-icd-loader vulkan-mesa-layers ${GPU_PACKAGES}
 
-# Override VA-API driver via environment variable
+# Sovrascrivi i driver VA-API tramite variable d'ambiente
 tee -a /etc/environment << EOF
 
 # VA-API
 ${LIBVA_ENV_VAR}
 EOF
 
-# If GPU is AMD, use RADV's Vulkan driver
+# Se la GPU è AMD, usa i driver Vulkan RADV
 if lspci | grep "VGA" | grep "AMD" > /dev/null; then
 tee -a /etc/environment << EOF
 
@@ -233,10 +238,10 @@ AMD_VULKAN_ICD=RADV
 EOF
 fi
 
-# Install VA-API tools
+# Installa VA-API tools
 pacman -S --noconfirm libva-utils
 
-# Install Vulkan tools
+# Installa Vulkan tools
 pacman -S --noconfirm vulkan-tools
 
 ################################################
@@ -295,7 +300,7 @@ pacman -S --noconfirm \
     otf-font-awesome
 
 ################################################
-##### Cleanup
+##### Fine installazione
 ################################################
 
 # Attribuire correttamente i permessi alla home del nuovo utente
@@ -303,4 +308,3 @@ chown -R ${NEW_USER}:${NEW_USER} /home/${NEW_USER}
 
 # Esce da chroot
 exit
-
