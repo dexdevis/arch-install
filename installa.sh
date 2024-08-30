@@ -84,7 +84,7 @@ EOF
 pacman -Syy
 
 # Installa i pacchetti base
-pacstrap /mnt base base-devel linux-lts linux-lts-headers linux-firmware nano btrfs-progs grub efibootmngr ${CPU_MICROCODE}
+pacstrap /mnt base base-devel linux-lts linux-lts-headers linux-firmware nano btrfs-progs grub efibootmgr ${CPU_MICROCODE}
 
 # Genera fstab
 genfstab -U /mnt >> /mnt/etc/fstab
