@@ -197,7 +197,6 @@ mkinitcpio -P
 clear # <------------------------------------------------------
 grub-install --target=x86_64-efi --efi-directory=/boot/EFI --bootloader-id=GRUB --recheck 
 grub-mkconfig -o /boot/grub/grub.cfg
-sleep 10s
 
 ################################################
 ##### GPU
@@ -250,38 +249,13 @@ EOF
 ##### GStreamer
 ################################################
 
-pacman -S --noconfirm \
-    gstreamer \
-    gst-libav \
-    gst-plugins-base \
-    gst-plugins-good \
-    gst-plugins-bad \
-    gst-plugins-ugly \
-    gstreamer-vaapi
-
+pacman -S --noconfirm gstreamer gst-libav gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gstreamer-vaapi
 
 ################################################
 ##### Fonts
 ################################################
 
-pacman -S --noconfirm \
-    noto-fonts \
-    noto-fonts-emoji \
-    noto-fonts-cjk \
-    noto-fonts-extra \
-    ttf-liberation \
-    otf-cascadia-code \
-    otf-commit-mono-nerd \
-    ttf-firacode-nerd \
-    ttf-hack-nerd \
- 	ttf-noto-nerd \
-    ttf-sourcecodepro-nerd \
-    ttf-ubuntu-nerd \
-    ttf-ubuntu-mono-nerd \
-    ttf-hack \
-    inter-font \
-    cantarell-fonts \
-    otf-font-awesome
+pacman -S --noconfirm noto-fonts noto-fonts-emoji noto-fonts-cjk noto-fonts-extra ttf-liberation otf-cascadia-code otf-commit-mono-nerd ttf-firacode-nerd ttf-hack-nerd ttf-noto-nerd ttf-sourcecodepro-nerd ttf-ubuntu-nerd ttf-ubuntu-mono-nerd ttf-hack inter-font cantarell-fonts otf-font-awesome
 
 ################################################
 ##### Fine installazione
