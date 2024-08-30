@@ -125,7 +125,7 @@ echo "%wheel ALL=(ALL) ALL" >> /etc/sudoers
 sudo -u ${NEW_USER} LC_ALL=it_IT.UTF-8 xdg-user-dirs-update --force
 
 # Imposta l'autologin
-if ${AUTOLOGIN}="s"; then
+if ${AUTOLOGIN}=="s"; then
     tee /etc/systemd/system/getty@tty1.service.d/autologin.conf << EOF
 [Service]
 ExecStart=
@@ -219,11 +219,10 @@ mkinitcpio -P
 ##### GRUB
 ################################################
 
-clear
-grub-install --target=x86_64-efi --efi-directory=/boot/EFI --bootloader-id=GRUB --recheck # <------------------------------------------------------
-sleep 3s
+clear # <------------------------------------------------------
+grub-install --target=x86_64-efi --efi-directory=/boot/EFI --bootloader-id=GRUB --recheck 
 grub-mkconfig -o /boot/grub/grub.cfg
-
+sleep 10s
 
 ################################################
 ##### GPU
