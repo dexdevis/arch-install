@@ -112,11 +112,13 @@ echo 'vm.vfs_cache_pressure=50' > /etc/sysctl.d/99-vfs-cache-pressure.conf
 ################################################
 
 # Setta la password di root
-echo "root:${NEW_USER_PASSWORD}" | passwd
+#echo "root:${NEW_USER_PASSWORD}" | passwd
+echo -en "${NEW_USER_PASSWORD}\n${NEW_USER_PASSWORD}" | passwd
 
 # Setup nuovo utente
 useradd -m -G wheel ${NEW_USER}
-echo "${NEW_USER}:${NEW_USER_PASSWORD}" | passwd
+#echo "${NEW_USER}:${NEW_USER_PASSWORD}" | passwd
+echo -en "${NEW_USER_PASSWORD}\n${NEW_USER_PASSWORD}" | passwd ${NEW_USER}
 echo "%wheel ALL=(ALL) ALL" >> /etc/sudoers
 
 # Crea le cartelle utente
