@@ -7,6 +7,7 @@ export NEW_USER
 
 read -sp "Password del nuovo utente: " NEW_USER_PASSWORD
 export NEW_USER_PASSWORD
+echo -e "\n"
 
 read -p "Nome Host del computer: " NEW_HOSTNAME
 export NEW_HOSTNAME
@@ -38,7 +39,7 @@ fi
 partprobe /dev/nvme0n1 # <----------------------------------
 
 # Cancella il disco
-wipefs -af /dev/nvme0n1
+wipefs -af /dev/nvme0n1 # <-------------------------------
 sgdisk --zap-all --clear /dev/nvme0n1 # <----------------------------------
 partprobe /dev/nvme0n1 # <----------------------------------
 
@@ -91,4 +92,3 @@ cp ./configura.sh /mnt/installa-arch/configura.sh
 arch-chroot /mnt /bin/bash /installa-arch/configura.sh
 rm -rf /mnt/installa-arch
 umount -R /mnt
-
