@@ -64,8 +64,6 @@ pacman -Syu
 ################################################
 
 pacman -S --noconfirm \
-    efibootmgr \
-    grub \
     sudo \
     bash-completion \
     dialog \    
