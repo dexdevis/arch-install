@@ -9,9 +9,6 @@ read -sp "Password del nuovo utente: " NEW_USER_PASSWORD
 export NEW_USER_PASSWORD
 echo -e "\n"
 
-read -p "Abilitare l'autologin per il nuovo utente [ s|n ]: " AUTOLOGIN
-export AUTOLOGIN
-
 read -p "Nome Host del computer: " NEW_HOSTNAME
 export NEW_HOSTNAME
 
