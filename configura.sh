@@ -175,10 +175,11 @@ systemctl enable systemd-networkd.service
 systemctl enable systemd-resolved.service
 
 if [[ ${WIFI} != "n" ]]; then
-    wpa_passphrase ${ESSID} '${PASS}' >> /etc/wpa_supplicant/wpa_supplicant-${WIFI}.conf
+    wpa_passphrase ${ESSID} ${PASS} >> /etc/wpa_supplicant/wpa_supplicant-${WIFI}.conf
 
     # Cancella la password in chiaro
-    sed -i "s|^${PASS}|********|g" /etc/wpa_supplicant/wpa_supplicant-${WIFI}.conf
+    sed -i "s|^#Color|Color|g" /etc/pacman.conf
+    sed -i "s|^#psk="${PASS}"|********|g" /etc/wpa_supplicant/wpa_supplicant-${WIFI}.conf
     systemctl enable wpa_supplicant@${WIFI}.service
 fi
 
