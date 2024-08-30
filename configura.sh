@@ -139,23 +139,23 @@ ufw enable
 clear
 ip link
 read -p "Inserire il nome della scheda di rete Ethernet: " ETH
-read -p "Inserire il nome della scheda di rete Wifi ([ N ] se non presente): " WIFI
+read -p "Inserire il nome della scheda di rete Wifi ([ n ] se non presente): " WIFI
 clear
 
-if WIFI="N"; then
-read -p "Inserire il nome della rete Wifi: " ESSID
-read -sp "Inserire la password: " PASS 
+if WIFI="n"; then
+    read -p "Inserire il nome della rete Wifi: " ESSID
+    read -sp "Inserire la password: " PASS 
 
-# Creo il file di configurazione dell'interfaccia Wifi
-tee /etc/wpa_supplicant/wpa_supplicant-${WIFI}.conf << EOF
+    # Creo il file di configurazione dell'interfaccia Wifi
+    tee /etc/wpa_supplicant/wpa_supplicant-${WIFI}.conf << EOF
 ctrl_interface=/var/run/wpa_supplicant
 eapol_version=1
 ap_scan=1
 fast_reauth=1
 EOF
 
-# Creo la configurazione per la connessione Wireless
-tee /etc/systemd/network/25-wireless.network << EOF
+    # Creo la configurazione per la connessione Wireless
+    tee /etc/systemd/network/25-wireless.network << EOF
 [Match]
 Name=${WIFI}
 
