@@ -63,7 +63,7 @@ pacman -Syu
 ##### Installa applicazioni di base
 ################################################
 
-pacman -S --noconfirm sudo bash-completion dialog wpa_supplicant mtools dosfstools coreutils util-linux inetutils xdg-utils xdg-user-dirs alsa-utils htop git p7zip unzip unrar which man-db man-pages rsync ufw zram-generator
+pacman -S --noconfirm sudo bash-completion dialog wpa_supplicant mtools dosfstools coreutils util-linux inetutils xdg-utils xdg-user-dirs alsa-utils htop git p7zip unzip unrar which man-db man-pages rsync ufw zram-generator net-tools
 
 ################################################
 ##### zram (swap)
