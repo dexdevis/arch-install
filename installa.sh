@@ -5,7 +5,7 @@ clear
 read -p "Inserire un nuovo utente: " NEW_USER
 export NEW_USER
 
-read -p "Password del nuovo utente: " NEW_USER_PASSWORD
+read -sp "Password del nuovo utente: " NEW_USER_PASSWORD
 export NEW_USER_PASSWORD
 echo -e "\n"
 
