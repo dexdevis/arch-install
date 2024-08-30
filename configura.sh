@@ -199,7 +199,7 @@ EOF
 systemctl enable systemd-networkd.service
 systemctl enable systemd-resolved.service
 
-if WIFI="N"; then
+if WIFI="n"; then
     wpa_passphrase ${ESSID} '${PASS}' >> /etc/wpa_supplicant/wpa_supplicant-${WIFI}.conf
 
     # Cancella la password in chiaro
