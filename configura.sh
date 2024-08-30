@@ -150,7 +150,7 @@ read -p "Inserire il nome della scheda di rete Ethernet: " ETH
 read -p "Inserire il nome della scheda di rete Wifi ([ n ] se non presente): " WIFI
 clear
 
-if ${WIFI}="n"; then
+if ${WIFI}!="n"; then
     read -p "Inserire il nome della rete Wifi: " ESSID
     read -sp "Inserire la password: " PASS 
 
@@ -199,7 +199,7 @@ EOF
 systemctl enable systemd-networkd.service
 systemctl enable systemd-resolved.service
 
-if ${WIFI}="n"; then
+if ${WIFI}!="n"; then
     wpa_passphrase ${ESSID} '${PASS}' >> /etc/wpa_supplicant/wpa_supplicant-${WIFI}.conf
 
     # Cancella la password in chiaro
@@ -219,7 +219,9 @@ mkinitcpio -P
 ##### GRUB
 ################################################
 
-grub-install --target=x86_64-efi --bootloader-id=grub_uefi --recheck # <------------------------------------------------------
+clear
+grub-install --target=x86_64-efi --efi-directory=/boot/EFI --bootloader-id=GRUB --recheck # <------------------------------------------------------
+sleep 3s
 grub-mkconfig -o /boot/grub/grub.cfg
 
 
