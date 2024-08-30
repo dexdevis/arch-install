@@ -95,11 +95,11 @@ useradd -m -G wheel ${NEW_USER}
 echo -en "${NEW_USER_PASSWORD}\n${NEW_USER_PASSWORD}" | passwd ${NEW_USER}
 echo "%wheel ALL=(ALL) ALL" >> /etc/sudoers
 
-# Crea le cartelle utente  <--------------------------------------
+# Crea le cartelle utente
 sudo -u ${NEW_USER} LC_ALL=it_IT.UTF-8 xdg-user-dirs-update --force 
 
 # Imposta l'autologin  <---------------------------------------------
-if ${AUTOLOGIN}=="s"; then 
+if ${AUTOLOGIN}=='s'; then 
     mkdir -p /etc/systemd/system/getty@tty1.service.d
     tee /etc/systemd/system/getty@tty1.service.d/autologin.conf << EOF 
 [Service]
@@ -125,7 +125,7 @@ read -p "Inserire il nome della scheda di rete Ethernet: " ETH
 read -p "Inserire il nome della scheda di rete Wifi ([ n ] se non presente): " WIFI
 clear
 
-if ${WIFI}!="n"; then
+if ${WIFI}!='n'; then
     read -p "Inserire il nome della rete Wifi: " ESSID
     read -sp "Inserire la password: " PASS 
 
@@ -174,7 +174,7 @@ EOF
 systemctl enable systemd-networkd.service
 systemctl enable systemd-resolved.service
 
-if ${WIFI}!="n"; then
+if ${WIFI}!='n'; then
     wpa_passphrase ${ESSID} '${PASS}' >> /etc/wpa_supplicant/wpa_supplicant-${WIFI}.conf
 
     # Cancella la password in chiaro
@@ -249,13 +249,13 @@ EOF
 ##### GStreamer
 ################################################
 
-pacman -S --noconfirm gstreamer gst-libav gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gstreamer-vaapi
+#pacman -S --noconfirm gstreamer gst-libav gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gstreamer-vaapi
 
 ################################################
 ##### Fonts
 ################################################
 
-pacman -S --noconfirm noto-fonts noto-fonts-emoji noto-fonts-cjk noto-fonts-extra ttf-liberation otf-cascadia-code otf-commit-mono-nerd ttf-firacode-nerd ttf-hack-nerd ttf-noto-nerd ttf-sourcecodepro-nerd ttf-ubuntu-nerd ttf-ubuntu-mono-nerd ttf-hack inter-font cantarell-fonts otf-font-awesome
+#pacman -S --noconfirm noto-fonts noto-fonts-emoji noto-fonts-cjk noto-fonts-extra ttf-liberation otf-cascadia-code otf-commit-mono-nerd ttf-firacode-nerd ttf-hack-nerd ttf-noto-nerd ttf-sourcecodepro-nerd ttf-ubuntu-nerd ttf-ubuntu-mono-nerd ttf-hack inter-font cantarell-fonts otf-font-awesome
 
 ################################################
 ##### Fine installazione
