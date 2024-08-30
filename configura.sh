@@ -194,8 +194,8 @@ mkinitcpio -P
 ##### GRUB
 ################################################
 
-clear # <------------------------------------------------------
-grub-install --target=x86_64-efi --efi-directory=/boot/EFI --bootloader-id=GRUB --recheck 
+clear
+grub-install --target=x86_64-efi --efi-directory=/boot/EFI --bootloader-id=GRUB
 grub-mkconfig -o /boot/grub/grub.cfg
 
 ################################################
