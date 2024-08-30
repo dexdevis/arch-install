@@ -64,9 +64,9 @@ umount /mnt
 # Monta i sottovolumi
 mount -o noatime,compress=zstd,subvol=@ /dev/nvme0n1p2 /mnt # <----------------------------------
 mkdir -p /mnt/home
-mkdir -p /mnt/boot/efi
+mkdir -p /mnt/boot/EFI
 mount -o noatime,compress=zstd,subvol=@home /dev/nvme0n1p2 /mnt/home # <----------------------------------
-mount /dev/nvme0n1p1 /mnt/boot/efi # <----------------------------------
+mount /dev/nvme0n1p1 /mnt/boot/EFI # <----------------------------------
 
 
 ################################################
