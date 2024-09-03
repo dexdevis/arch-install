@@ -6,8 +6,6 @@
 
 # Enable systemd-timesyncd
 systemctl enable systemd-timesyncd.service
-# -------------------------------------------> verificare file di configurazione
-
 
 # Set timezone
 ln -sf /usr/share/zoneinfo/Europe/Rome /etc/localtime
@@ -169,7 +167,6 @@ if [[ ${WIFI} != "n" ]]; then
     wpa_passphrase ${ESSID} ${PASS} >> /etc/wpa_supplicant/wpa_supplicant-${WIFI}.conf
 
     # Cancella la password in chiaro
-    #sed -i "s|^${PASS}|********|g" /etc/wpa_supplicant/wpa_supplicant-${WIFI}.conf <------------------------------------------------------------
     sed -i "/#psk=/d" /etc/wpa_supplicant/wpa_supplicant-${WIFI}.conf
     systemctl enable wpa_supplicant@${WIFI}.service
 fi
@@ -189,7 +186,11 @@ mkinitcpio -P
 clear
 grub-install --target=x86_64-efi --efi-directory=/boot/EFI --bootloader-id=GRUB
 sed -i "s|GRUB_TIMEOUT=5|GRUB_TIMEOUT=0|" /etc/default/grub
-sed -i "s|GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3 quiet"|GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3"|" /etc/default/grub
+if cat /proc/cpuinfo | grep "vendor" | grep "AuthenticAMD" > /dev/null; then
+    sed -i "s|GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3 quiet"|GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3 ${AMD_SCALING_DRIVER}"|" /etc/default/grub
+else
+    sed -i "s|GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3 quiet"|GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3"|" /etc/default/grub
+fi
 grub-mkconfig -o /boot/grub/grub.cfg
 
 ################################################
@@ -255,7 +256,7 @@ EOF
 ##### Fine installazione
 ################################################
 
-# Attribuire correttamente i permessi alla home del nuovo utente
+# Attribuisce correttamente i permessi alla home del nuovo utente
 chown -R ${NEW_USER}:${NEW_USER} /home/${NEW_USER}
 
 # Esce da chroot
