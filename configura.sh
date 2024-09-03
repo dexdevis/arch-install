@@ -187,9 +187,9 @@ clear
 grub-install --target=x86_64-efi --efi-directory=/boot/EFI --bootloader-id=GRUB
 sed -i "s|GRUB_TIMEOUT=5|GRUB_TIMEOUT=0|g" /etc/default/grub
 if cat /proc/cpuinfo | grep "vendor" | grep "AuthenticAMD" > /dev/null; then
-    sed -i 's|GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3 quiet"|GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3 ${AMD_SCALING_DRIVER}"|g' /etc/default/grub
+    sed -i "s|GRUB_CMDLINE_LINUX_DEFAULT=\"loglevel=3 quiet\"|GRUB_CMDLINE_LINUX_DEFAULT=\"loglevel=3 ${AMD_SCALING_DRIVER}\"|g" /etc/default/grub
 else
-    sed -i 's|GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3 quiet"|GRUB_CMDLINE_LINUX_DEFAULT=\"loglevel=3\"|g' /etc/default/grub
+    sed -i "s|GRUB_CMDLINE_LINUX_DEFAULT=\"loglevel=3 quiet\"|GRUB_CMDLINE_LINUX_DEFAULT=\"loglevel=3\"|g" /etc/default/grub
 fi
 grub-mkconfig -o /boot/grub/grub.cfg
 
@@ -251,6 +251,35 @@ EOF
 ################################################
 
 #pacman -S --noconfirm noto-fonts noto-fonts-emoji noto-fonts-cjk noto-fonts-extra ttf-liberation otf-cascadia-code otf-commit-mono-nerd ttf-firacode-nerd ttf-hack-nerd ttf-noto-nerd ttf-sourcecodepro-nerd ttf-ubuntu-nerd ttf-ubuntu-mono-nerd ttf-hack inter-font cantarell-fonts otf-font-awesome
+
+################################################
+##### Power Management
+################################################
+
+if [[ $(cat /sys/class/dmi/id/chassis_type) -eq 10 ]]; then
+    # Attiva il risparmio energetico sull'audio
+    echo 'options snd_hda_intel power_save=1' > /etc/modprobe.d/audio_powersave.conf
+
+    # Attiva il risparmio energetico sul wifi
+    echo 'options iwlwifi power_save=1' > /etc/modprobe.d/iwlwifi.conf
+
+    mkinitcpio -P
+else
+    if lspci | grep "VGA" | grep "AMD" > /dev/null; then
+        # Setta il livello di performance delle GPU AMD al livello minimo
+        echo 'SUBSYSTEM=="pci", DRIVER=="amdgpu", ATTR{power_dpm_force_performance_level}="low"' > /etc/udev/rules.d/30-amdgpu-high-power.rules
+    fi
+fi
+
+# Installa e abilita thermald per le CPU Intel
+if [[ $(cat /proc/cpuinfo | grep vendor | uniq) =~ "GenuineIntel" ]]; then
+    pacman -S --noconfirm thermald
+    systemctl enable thermald.service
+fi
+
+# Intalla e abilita TLP
+pacman -S --noconfirm tlp
+systemctl enable tlp.service
 
 ################################################
 ##### Fine installazione
