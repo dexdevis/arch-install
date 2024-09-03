@@ -4,10 +4,10 @@
 ##### Orologio
 ################################################
 
-# Enable systemd-timesyncd
+# Abilita systemd-timesyncd
 systemctl enable systemd-timesyncd.service
 
-# Set timezone
+# Setta la timezone
 ln -sf /usr/share/zoneinfo/Europe/Rome /etc/localtime
 hwclock --systohc
 
@@ -27,10 +27,10 @@ echo "KEYMAP=it" > /etc/vconsole.conf
 ##### Hostname
 ################################################
 
-# Set hostname
+# Setta l'hostname
 echo ${NEW_HOSTNAME} > /etc/hostname
 
-# Set /etc/hosts
+# Setta /etc/hosts
 tee /etc/hosts << EOF
 127.0.0.1 localhost
 ::1 localhost
@@ -183,7 +183,6 @@ mkinitcpio -P
 ##### GRUB
 ################################################
 
-clear
 grub-install --target=x86_64-efi --efi-directory=/boot/EFI --bootloader-id=GRUB
 sed -i "s|GRUB_TIMEOUT=5|GRUB_TIMEOUT=0|g" /etc/default/grub
 if cat /proc/cpuinfo | grep "vendor" | grep "AuthenticAMD" > /dev/null; then
@@ -282,11 +281,29 @@ pacman -S --noconfirm tlp
 systemctl enable tlp.service
 
 ################################################
+##### Paru
+################################################
+
+# Concedo temporaneamente al nuovo utente di utilizzare pacman senza password
+echo "${NEW_USER} ALL=NOPASSWD:/usr/bin/pacman" >> /etc/sudoers
+
+# Installo paru
+git clone https://aur.archlinux.org/paru-bin.git
+chown -R ${NEW_USER}:${NEW_USER} paru-bin
+cd paru-bin
+sudo -u ${NEW_USER} makepkg -si --noconfirm
+cd ..
+rm -rf paru-bin
+
+################################################
 ##### Fine installazione
 ################################################
 
-# Attribuisce correttamente i permessi alla home del nuovo utente
+# Attribuisco correttamente i permessi alla home del nuovo utente
 chown -R ${NEW_USER}:${NEW_USER} /home/${NEW_USER}
 
-# Esce da chroot
+# Ripristino il file sudoers
+sed -i "/${NEW_USER} ALL=NOPASSWD:\/usr\/bin\/pacman/d" /etc/sudoers
+
+# Esco da chroot
 exit
