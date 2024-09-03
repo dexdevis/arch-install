@@ -185,11 +185,11 @@ mkinitcpio -P
 
 clear
 grub-install --target=x86_64-efi --efi-directory=/boot/EFI --bootloader-id=GRUB
-sed -i "s|GRUB_TIMEOUT=5|GRUB_TIMEOUT=0|" /etc/default/grub
+sed -i "s|GRUB_TIMEOUT=5|GRUB_TIMEOUT=0|g" /etc/default/grub
 if cat /proc/cpuinfo | grep "vendor" | grep "AuthenticAMD" > /dev/null; then
-    sed -i "s|GRUB_CMDLINE_LINUX_DEFAULT=\"loglevel=3 quiet\"|GRUB_CMDLINE_LINUX_DEFAULT=\"loglevel=3 ${AMD_SCALING_DRIVER}\"|" /etc/default/grub
+    sed -i 's|GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3 quiet"|GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3 ${AMD_SCALING_DRIVER}"|g' /etc/default/grub
 else
-    sed -i "s|GRUB_CMDLINE_LINUX_DEFAULT=\"loglevel=3 quiet\"|GRUB_CMDLINE_LINUX_DEFAULT=\"loglevel=3\"|" /etc/default/grub
+    sed -i 's|GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3 quiet"|GRUB_CMDLINE_LINUX_DEFAULT=\"loglevel=3\"|g' /etc/default/grub
 fi
 grub-mkconfig -o /boot/grub/grub.cfg
 
