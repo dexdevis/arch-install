@@ -177,6 +177,7 @@ fi
 
 # Configura mkinitcpio
 sed -i "s|MODULES=()|MODULES=(btrfs${MKINITCPIO_MODULES})|" /etc/mkinitcpio.conf
+sed -i "s|BINARIES=()|BINARIES=(btrfs)|" /etc/mkinitcpio.conf
 mkinitcpio -P
 
 ################################################
