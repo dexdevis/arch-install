@@ -240,18 +240,6 @@ DefaultTimeoutStopSec=5s
 EOF
 
 ################################################
-##### GStreamer
-################################################
-
-#pacman -S --noconfirm gstreamer gst-libav gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gstreamer-vaapi
-
-################################################
-##### Fonts
-################################################
-
-#pacman -S --noconfirm noto-fonts noto-fonts-emoji noto-fonts-cjk noto-fonts-extra ttf-liberation otf-cascadia-code otf-commit-mono-nerd ttf-firacode-nerd ttf-hack-nerd ttf-noto-nerd ttf-sourcecodepro-nerd ttf-ubuntu-nerd ttf-ubuntu-mono-nerd ttf-hack inter-font cantarell-fonts otf-font-awesome
-
-################################################
 ##### Power Management
 ################################################
 
