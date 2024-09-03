@@ -287,7 +287,7 @@ rm -rf paru-bin
 ##### Installa e configura btrfsmaintenance
 ################################################
 
-paru -S --noconfirm btrfsmaintenance
+sudo -u ${NEW_USER} paru -S --noconfirm btrfsmaintenance
 #---------------------------------------------------------- modificare le impostazioni
 
 ################################################
