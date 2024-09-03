@@ -188,6 +188,8 @@ mkinitcpio -P
 
 clear
 grub-install --target=x86_64-efi --efi-directory=/boot/EFI --bootloader-id=GRUB
+sed -i "s|GRUB_TIMEOUT=5|GRUB_TIMEOUT=0|" /etc/default/grub
+sed -i "s|GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3 quiet"|GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3"|" /etc/default/grub
 grub-mkconfig -o /boot/grub/grub.cfg
 
 ################################################
