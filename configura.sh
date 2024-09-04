@@ -293,7 +293,8 @@ rm -rf paru-bin
 ################################################
 
 sudo -u ${NEW_USER} paru -S --noconfirm btrfsmaintenance
-#---------------------------------------------------------- modificare le impostazioni
+# Modifico le impostazioni in /etc/default/btrfsmaintenance -------------------------------------------------------------------------------------------
+
 
 ################################################
 ##### Fine installazione
