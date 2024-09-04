@@ -226,6 +226,10 @@ pacman -S --noconfirm vulkan-tools
 ##### Systemd
 ################################################
 
+# Modifica impostazioni giornale dei log
+sed -i "s|#Storage=auto|Storage=volatile|g" /etc/systemd/journald.conf
+sed -i "s|#SystemMaxUse=|SystemMaxUse=50M|g" /etc/systemd/journald.conf
+
 # Configura il timeout di default per le unità di sistema
 mkdir -p /etc/systemd/system.conf.d
 tee /etc/systemd/system.conf.d/default-timeout.conf << EOF
