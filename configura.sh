@@ -274,6 +274,12 @@ pacman -S --noconfirm tlp
 systemctl enable tlp.service
 
 ################################################
+##### Server Xorg
+################################################
+
+pacman -S ttf-dejavu ttf-liberation xorg-server xorg-xinit
+
+################################################
 ##### Paru
 ################################################
 
