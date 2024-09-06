@@ -259,7 +259,7 @@ if [[ $(cat /sys/class/dmi/id/chassis_type) -eq 10 ]]; then
 else
     if lspci | grep "VGA" | grep "AMD" > /dev/null; then
         # Setta il livello di performance delle GPU AMD al livello minimo
-        echo 'SUBSYSTEM=="pci", DRIVER=="amdgpu", ATTR{power_dpm_force_performance_level}="low"' > /etc/udev/rules.d/30-amdgpu-high-power.rules
+        echo 'SUBSYSTEM=="pci", DRIVER=="amdgpu", ATTR{power_dpm_force_performance_level}="low"' > /etc/udev/rules.d/30-amdgpu-low-power.rules
     fi
 fi
 
@@ -289,12 +289,20 @@ cd ..
 rm -rf paru-bin
 
 ################################################
-##### Installa e configura btrfsmaintenance
+##### Installa programmi da AUR
 ################################################
 
+# BTRFSMAINTENANCE
 sudo -u ${NEW_USER} paru -S --noconfirm btrfsmaintenance
-# Modifico le impostazioni in /etc/default/btrfsmaintenance -------------------------------------------------------------------------------------------
+# Modifico le impostazioni in /etc/default/btrfsmaintenance
+sed -i "s|BTRFS_LOG_OUTPUT=\"stdout\"|BTRFS_LOG_OUTPUT=\"journal\"|g" /etc/default/btrfsmaintenance
+sed -i "s|BTRFS_BALANCE_PERIOD=\"weekly\"|BTRFS_BALANCE_PERIOD=\"none\"|g" /etc/default/btrfsmaintenance
+sed -i "s|BTRFS_TRIM_PERIOD=\"none\"|BTRFS_TRIM_PERIOD=\"weekly\"|g" /etc/default/btrfsmaintenance
+sudo -u ${NEW_USER}
+systemctl restart btrfsmaintenance-refresh.service
 
+# BTRFSMAINTENANCE
+sudo -u ${NEW_USER} paru -S --noconfirm mkinitcpio-firmware
 
 ################################################
 ##### Fine installazione
