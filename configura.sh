@@ -324,7 +324,7 @@ pacman -S --noconfirm timeshift grub-btrfs
 rsync -a /boot /.bootbackup
 
 # Creo il primo snapshot di Backup
-sudo -u ${NEW_USER} timeshift --create --btrfs --snapshot-device /dev/nvme0n1p2 --comments "Primo Backup" --tags O # <-----------------------------------------------------------------
+sudo -u ${NEW_USER} timeshift --create --btrfs --snapshot-device /dev/nvme0n1p2 --comments "Primo Backup" # <-----------------------------------------------------------------
 grub-mkconfig -o /boot/grub/grub.cfg
 
 # Per ripristinare un backup: sudo timeshift --restore
