@@ -311,16 +311,6 @@ systemctl restart btrfsmaintenance-refresh.service
 sudo -u ${NEW_USER} paru -S --noconfirm mkinitcpio-firmware
 
 ################################################
-##### Ripristino permessi User
-################################################
-
-# Attribuisco correttamente i permessi alla home del nuovo utente
-chown -R ${NEW_USER}:${NEW_USER} /home/${NEW_USER}
-
-# Ripristino il file sudoers
-sed -i "/${NEW_USER} ALL=NOPASSWD:\/usr\/bin\/pacman/d" /etc/sudoers
-
-################################################
 ##### BACKUP
 ################################################
 
@@ -334,7 +324,7 @@ pacman -S --noconfirm timeshift grub-btrfs
 rsync -a /boot /.bootbackup
 
 # Creo il primo snapshot di Backup
-timeshift --create --btrfs --snapshot-device /dev/nvme0n1p2 --comments "Primo Backup" --tags O # <-----------------------------------------------------------------
+sudo -u ${NEW_USER} timeshift --create --btrfs --snapshot-device /dev/nvme0n1p2 --comments "Primo Backup" --tags O # <-----------------------------------------------------------------
 grub-mkconfig -o /boot/grub/grub.cfg
 
 # Per ripristinare un backup: sudo timeshift --restore
@@ -343,6 +333,12 @@ grub-mkconfig -o /boot/grub/grub.cfg
 ################################################
 ##### Fine installazione
 ################################################
+
+# Attribuisco correttamente i permessi alla home del nuovo utente
+chown -R ${NEW_USER}:${NEW_USER} /home/${NEW_USER}
+
+# Ripristino il file sudoers
+sed -i "/${NEW_USER} ALL=NOPASSWD:\/usr\/bin\/pacman/d" /etc/sudoers
 
 # Esco da chroot
 exit
