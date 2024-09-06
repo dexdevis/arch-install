@@ -305,7 +305,7 @@ systemctl restart btrfsmaintenance-refresh.service
 sudo -u ${NEW_USER} paru -S --noconfirm mkinitcpio-firmware
 
 ################################################
-##### Fine installazione
+##### Ripristino permessi User
 ################################################
 
 # Attribuisco correttamente i permessi alla home del nuovo utente
@@ -313,6 +313,30 @@ chown -R ${NEW_USER}:${NEW_USER} /home/${NEW_USER}
 
 # Ripristino il file sudoers
 sed -i "/${NEW_USER} ALL=NOPASSWD:\/usr\/bin\/pacman/d" /etc/sudoers
+
+################################################
+##### BACKUP
+################################################
+
+# N.B.: non utilizzo automatismi per gli snapshot, quindi prima di ogni aggiornamento copio /boot su root,
+# effettuo uno snapshot e aggiorno manualmente GRUB
+
+# Installo Timeshift e grub-btrfs per poter riavviare da un backup
+pacman -S timeshift grub-btrfs
+
+# Creo un backup di boot su root
+rsync -a /boot /.bootbackup
+
+# Creo il primo snapshot di Backup
+timeshift --create --comments "Primo Backup" --tags O
+grub-mkconfig -o /boot/grub/grub.cfg
+
+# Per ripristinare un backup: sudo timeshift --restore
+# Per ripristinare /boot, sotto /.bootbackup si trova una copia di /boot
+
+################################################
+##### Fine installazione
+################################################
 
 # Esco da chroot
 exit
