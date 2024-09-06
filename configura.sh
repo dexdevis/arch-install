@@ -185,7 +185,7 @@ mkinitcpio -P
 ################################################
 
 grub-install --target=x86_64-efi --efi-directory=/boot/EFI --bootloader-id=GRUB
-sed -i "s|GRUB_TIMEOUT=5|GRUB_TIMEOUT=0|g" /etc/default/grub
+sed -i "s|GRUB_TIMEOUT=5|GRUB_TIMEOUT=2|g" /etc/default/grub
 if cat /proc/cpuinfo | grep "vendor" | grep "AuthenticAMD" > /dev/null; then
     sed -i "s|GRUB_CMDLINE_LINUX_DEFAULT=\"loglevel=3 quiet\"|GRUB_CMDLINE_LINUX_DEFAULT=\"loglevel=3 ${AMD_SCALING_DRIVER}\"|g" /etc/default/grub
 else
@@ -277,7 +277,7 @@ systemctl enable tlp.service
 ##### Server Xorg
 ################################################
 
-pacman -S ttf-dejavu ttf-liberation xorg-server xorg-xinit
+pacman -S --noconfirm ttf-dejavu ttf-liberation xorg-server xorg-xinit
 
 ################################################
 ##### Paru
@@ -328,7 +328,7 @@ sed -i "/${NEW_USER} ALL=NOPASSWD:\/usr\/bin\/pacman/d" /etc/sudoers
 # effettuo uno snapshot e aggiorno manualmente GRUB
 
 # Installo Timeshift e grub-btrfs per poter riavviare da un backup
-pacman -S timeshift grub-btrfs
+pacman -S --noconfirm timeshift grub-btrfs
 
 # Creo un backup di boot su root
 rsync -a /boot /.bootbackup
