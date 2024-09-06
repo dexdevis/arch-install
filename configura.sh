@@ -301,7 +301,7 @@ sed -i "s|BTRFS_TRIM_PERIOD=\"none\"|BTRFS_TRIM_PERIOD=\"weekly\"|g" /etc/defaul
 sudo -u ${NEW_USER}
 systemctl restart btrfsmaintenance-refresh.service
 
-# BTRFSMAINTENANCE
+# FIRMWARE DI MKINITCPIO
 sudo -u ${NEW_USER} paru -S --noconfirm mkinitcpio-firmware
 
 ################################################
