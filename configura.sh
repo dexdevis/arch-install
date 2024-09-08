@@ -321,11 +321,11 @@ sudo -u ${NEW_USER} paru -S --noconfirm mkinitcpio-firmware
 pacman -S --noconfirm timeshift grub-btrfs
 
 # Creo un backup di boot su root
-rsync -a /boot /.bootbackup
+# rsync -a /boot /.bootbackup
 
 # Creo il primo snapshot di Backup
-timeshift --create --btrfs --comments "Primo Backup"
-grub-mkconfig -o /boot/grub/grub.cfg
+# timeshift --create --btrfs --comments "Primo Backup"
+# grub-mkconfig -o /boot/grub/grub.cfg
 
 # Per ripristinare un backup: sudo timeshift --restore
 # Per ripristinare /boot, sotto /.bootbackup si trova una copia di /boot
