@@ -178,6 +178,7 @@ fi
 # Configura mkinitcpio
 sed -i "s|MODULES=()|MODULES=(btrfs${MKINITCPIO_MODULES})|" /etc/mkinitcpio.conf
 sed -i "s|BINARIES=()|BINARIES=(btrfs)|" /etc/mkinitcpio.conf
+sed -i "s|HOOKS=(base udev autodetect microcode modconf kms keyboard keymap consolefont block filesystems fsck)|HOOKS=(base udev autodetect microcode modconf kms keyboard keymap block filesystems fsck)|" /etc/mkinitcpio.conf
 mkinitcpio -P
 
 ################################################
