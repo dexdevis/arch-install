@@ -306,7 +306,6 @@ sudo -u ${NEW_USER} paru -S --noconfirm btrfsmaintenance
 sed -i "s|BTRFS_LOG_OUTPUT=\"stdout\"|BTRFS_LOG_OUTPUT=\"journal\"|g" /etc/default/btrfsmaintenance
 sed -i "s|BTRFS_BALANCE_PERIOD=\"weekly\"|BTRFS_BALANCE_PERIOD=\"none\"|g" /etc/default/btrfsmaintenance
 sed -i "s|BTRFS_TRIM_PERIOD=\"none\"|BTRFS_TRIM_PERIOD=\"weekly\"|g" /etc/default/btrfsmaintenance
-sudo -u ${NEW_USER}
 systemctl restart btrfsmaintenance-refresh.service
 
 # FIRMWARE DI MKINITCPIO
@@ -356,7 +355,7 @@ EOF
 
 
 # Creo il primo snapshot di Backup
-timeshift --create --comments "Primo Backup"
+sudo -u ${NEW_USER} timeshift --create --comments "Primo Backup"
 grub-mkconfig -o /boot/grub/grub.cfg
 
 # Per ripristinare un backup: sudo timeshift --restore
