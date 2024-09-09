@@ -322,11 +322,41 @@ sudo -u ${NEW_USER} paru -S --noconfirm mkinitcpio-firmware
 pacman -S --noconfirm timeshift grub-btrfs
 
 # Creo un backup di boot su root
-# rsync -a /boot /.bootbackup
+rsync -a /boot /.bootbackup
+
+# Configuro Timeshift per il backup di root
+SSD=blkid -s UUID -o value /dev/sda2 # <-------------------------------------------------------------------------------------------------
+tee /etc/timeshift/timeshift.json << EOF
+{
+ "backup_device_uuid" : "${SSD}",
+ "parent_device_uuid" : "",
+ "do_first_run" : "false",
+ "btrfs_mode" : "true",
+ "include_btrfs_home_for_backup" : "false",
+ "include_btrfs_home_for_restore" : "false",
+ "stop_cron_emails" : "true",
+ "schedule_monthly" : "false",
+ "schedule_weekly" : "false",
+ "schedule_daily" : "false",
+ "schedule_hourly" : "false",
+ "schedule_boot" : "false",
+ "count_monthly" : "2",
+ "count_weekly" : "3",
+ "count_daily" : "5",
+ "count_hourly" : "6",
+ "count_boot" : "5",
+ "snapshot_size" : "0",
+ "snapshot_count" : "0",
+ "date_format" : "%Y-%m-%d %H:%M:%S",
+ "exclude" : [],
+ "exclude-apps" : []
+}
+EOF
+
 
 # Creo il primo snapshot di Backup
-# timeshift --create --btrfs --comments "Primo Backup"
-# grub-mkconfig -o /boot/grub/grub.cfg
+timeshift --create --comments "Primo Backup"
+grub-mkconfig -o /boot/grub/grub.cfg
 
 # Per ripristinare un backup: sudo timeshift --restore
 # Per ripristinare /boot, sotto /.bootbackup si trova una copia di /boot
