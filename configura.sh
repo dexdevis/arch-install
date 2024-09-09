@@ -325,7 +325,7 @@ pacman -S --noconfirm timeshift grub-btrfs
 rsync -a /boot /.bootbackup
 
 # Configuro Timeshift per il backup di root
-SSD=blkid -s UUID -o value /dev/nvme0n1p2 # <-------------------------------------------------------------------------------------------------
+SSD=$(blkid -s UUID -o value /dev/nvme0n1p2) # <-------------------------------------------------------------------------------------------------
 tee /etc/timeshift/timeshift.json << EOF
 {
  "backup_device_uuid" : "${SSD}",
