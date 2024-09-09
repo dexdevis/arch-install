@@ -109,6 +109,7 @@ ufw enable
 # Chiedo in input i nomi delle interfacce di rete e i dati della rete wifi
 clear
 ip link
+echo "\n"
 read -p "Inserire il nome della scheda di rete Ethernet: " ETH
 read -p "Inserire il nome della scheda di rete Wifi ([ n ] se non presente): " WIFI
 clear
